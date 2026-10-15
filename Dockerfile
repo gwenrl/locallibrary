@@ -25,7 +25,7 @@ RUN python manage.py collectstatic --noinput
 # owns its own database, so there is no cross-app migration race.
 # 1 worker + threads, not 4 workers: on a 1 GB box, threads are nearly free and
 # processes are not.
-CMD ["sh", "-c", "python manage.py migrate --noinput && exec gunicorn --bind 0.0.0.0:8000 --workers 1 --threads 4 locallibrary_config.wsgi"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && exec daphne -b 0.0.0.0 -p 8000 locallibrary_config.asgi:application"]
 
 # For the Channels app, swap the last line for:
 # CMD ["sh", "-c", "python manage.py migrate --noinput && exec daphne -b 0.0.0.0 -p 8000 locallibrary_config.asgi:application"]
