@@ -139,8 +139,21 @@ MAILERS = {
 }
 
 # locallibrary_config/settings.py
-# Daphne
+# Channels
 ASGI_APPLICATION = "locallibrary_config.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                {
+                    "address": env("REDIS_URL"),
+                    "socket_timeout": env.int("REDIS_SOCKET_TIMEOUT"),
+                }
+            ],
+        },
+    },
+}
 
 import environ
 
