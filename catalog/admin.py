@@ -24,8 +24,6 @@ class BookAuthorInline(admin.TabularInline):
     extra = 0
 
 # Define the admin class
-class BookInline(admin.TabularInline):
-    model = Book
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = ('last_name', 'first_name', 'date_of_birth', 'date_of_death')

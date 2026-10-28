@@ -140,7 +140,7 @@ class Author(models.Model):
         """String for representing the Model object."""
         return f'{self.last_name}, {self.first_name}'
 
-    class BookAuthor(models.Model):
-        book = models.ForeignKey('Book', on_delete=models.CASCADE)
-        author = models.ForeignKey('Author', on_delete=models.CASCADE)
-        author_order = models.IntegerField(default=1)
+class BookAuthor(models.Model):
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
+    author = models.ForeignKey('Author', on_delete=models.CASCADE)
+    author_order = models.IntegerField(default=1)
