@@ -46,3 +46,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# Add django-allauth's account urls (for login, logout, sign-up, password management)
+
+urlpatterns += [
+    path('accounts/', include('allauth.urls')),
+]
