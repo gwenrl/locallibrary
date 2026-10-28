@@ -144,3 +144,6 @@ class BookAuthor(models.Model):
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     author = models.ForeignKey('Author', on_delete=models.CASCADE)
     author_order = models.IntegerField(default=1)
+
+    def get_absolute_url(self):
+        return reverse('author-detail', args=[str(self.id)])

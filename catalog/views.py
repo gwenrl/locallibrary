@@ -42,3 +42,6 @@ class BookListView(generic.ListView):
 
 class BookDetailView(generic.DetailView):
     model = Book
+
+class AuthorDetailView(generic.DetailView):
+    model = Author
