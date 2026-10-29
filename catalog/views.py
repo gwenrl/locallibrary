@@ -53,6 +53,9 @@ class BookDetailView(generic.DetailView):
 class AuthorDetailView(generic.DetailView):
     model = Author
 
+class AuthorListView(generic.ListView):
+    model = Author
+
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
@@ -142,7 +145,7 @@ class AuthorUpdate(PermissionRequiredMixin, UpdateView):
 
 class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
-    success_url = reverse_lazy('books')
+    success_url = reverse_lazy('authors')
     permission_required = 'catalog.delete_author'
 
     def form_valid(self, form):
@@ -159,15 +162,23 @@ BookAuthorFormSet = inlineformset_factory(
 
 
 class BookAuthorFormSetMixin:
+    def _formset_submitted(self):
+        prefix = BookAuthorFormSet.get_default_prefix()
+        return f'{prefix}-TOTAL_FORMS' in self.request.POST
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
+        if self.request.method == 'POST' and self._formset_submitted():
             context['author_formset'] = BookAuthorFormSet(self.request.POST, instance=self.object)
         else:
             context['author_formset'] = BookAuthorFormSet(instance=self.object)
         return context
 
     def form_valid(self, form):
+        # No author rows submitted: just save the book normally.
+        if not self._formset_submitted():
+            return super().form_valid(form)
+
         author_formset = BookAuthorFormSet(self.request.POST, instance=form.instance)
         if not author_formset.is_valid():
             return self.form_invalid(form)
@@ -175,7 +186,6 @@ class BookAuthorFormSetMixin:
         author_formset.instance = self.object
         author_formset.save()
         return HttpResponseRedirect(self.get_success_url())
-
 
 class BookCreate(PermissionRequiredMixin, BookAuthorFormSetMixin, CreateView):
     model = Book
