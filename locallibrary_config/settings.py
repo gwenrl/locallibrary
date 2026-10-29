@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'ninja',
+    'projects',
+    'tasks',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -133,6 +136,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# User-uploaded files
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Email
